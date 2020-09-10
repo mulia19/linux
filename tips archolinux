@@ -1,0 +1,35 @@
+file mirrorlist terletak di : /etc/pacman.d/mirrorlist 
+a. menggunakan reflector
+- pacman -S reflector
+- cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+- reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+jika ada permission denied maka gunakan su bukan sudo su di terminal
+
+b. menggunakan rankmirrors
+- sudo pacman -S pacman-contrib
+- rankmirrors /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+- rankmirrors -n 5 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+jika ada permission denied maka gunakan su bukan sudo su di terminal
+
+timeshift error crontab maka selesaikan dengan :
+- sudo pacman -Ss chronie
+- yay cronie
+pilih 1, maka timeshift bisa dijalankan kembali
+
+conky tidak muncul setelah update, bisa install kembali conky di add program (conky-lua-archers yang menjadi sebabnya) atau bisa juga update di terminal
+
+membersihkan system arch :
+- pacman -Qdt
+- sudo pacman -R $(pacman -Qdtq)
+- pacman -Scc
+- pacman -Rns $(pacman -Qtdq)
+- pacman -D --asexplicit base linux linux-firmware 
+- LC_ALL=C pacman -Si packages | awk -F'[:<=>]' '/^Depends/ {print $2}' | xargs -n1 | sort -u
+
+masalah tty1 setelah fresh install :
+login dengan user yg sdh dibuat kemudian di terminalnya
+- skel
+- sudo systemctl enable lightdm.service		
+(lightdm atau sddm atau gdm  tergantung pilihan pada waktu menginstall sebelumnya)
+jika masih belum selesai maka bisa dicoba :
+- sudo systemctl enable lightdm.service -f
